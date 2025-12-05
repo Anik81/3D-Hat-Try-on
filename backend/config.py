@@ -21,7 +21,7 @@ class Config:
     
     # Hat positioning settings
     HAT_SCALE_FACTOR = 1.3  # Fine-tuned for optimal size
-    HAT_OFFSET_Y = -0.2   # Reduced from -0.8 - closer to head positioning
+    HAT_OFFSET_Y = -0.6   # Positioned properly on top of head
     HAT_OFFSET_Z = 0.05   # Move hat forward
     
     # Model-specific scaling presets (inspired by MindAR methodology)

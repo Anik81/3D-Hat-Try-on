@@ -58,12 +58,17 @@ class PoseCalculator:
     def _calculate_hat_position(self, landmarks: Dict, frame_width: int, frame_height: int) -> Dict[str, float]:
         """Calculate hat position in normalized coordinates (0-1 range)."""
         try:
-            # Get forehead center and top of head
+            # Get forehead center as the base position
             forehead = landmarks['forehead_center']
+            head_height = landmarks['head_height']
             
-            # Calculate position above forehead
+            # Calculate position on top of head (not above forehead)
+            # Use a percentage of head height to position hat correctly on the crown
             hat_x = forehead['x'] / frame_width
-            hat_y = (forehead['y'] + Config.HAT_OFFSET_Y * landmarks['head_height']) / frame_height
+            
+            # Position hat on top of head: move up by a fraction of head height from forehead
+            crown_offset = head_height * 0.4  # 40% of head height up from forehead to crown
+            hat_y = (forehead['y'] - crown_offset) / frame_height
             hat_z = Config.HAT_OFFSET_Z  # Fixed depth offset
             
             # Clamp values to reasonable ranges

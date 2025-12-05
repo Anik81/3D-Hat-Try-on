@@ -100,37 +100,43 @@ function HatModel({ hatPose, visible, onModelLoad }) {
       // Different positioning for GLB vs fallback
       const isGLBModel = gltf && gltf.scene;
       
-      // Fine-tuned positioning based on model type (aligned with MindAR scale values)
+      // Dynamic positioning based on actual head size and pose data
       let yOffset, scale;
       
       // Check if hat model has specific requirements (could be detected from model metadata)
       const modelType = hatPose.modelType || 'default'; // Future: detect from model name/size
       
+      // Calculate dynamic offset based on scale (head size)
+      // Larger heads need less offset, smaller heads need more offset
+      const baseYOffset = -0.1; // Base offset for positioning on crown
+      const scaleFactor = Math.max(0.5, Math.min(2.0, hatPose.scale)); // Clamp scale for offset calculation
+      const dynamicYOffset = baseYOffset * (1.0 / scaleFactor); // Inverse relationship
+      
       if (isGLBModel) {
-        // GLB models - scale similar to MindAR's methodology with presets
+        // GLB models - use dynamic positioning
         switch(modelType) {
           case 'large_hat':
-            yOffset = -1.0;
-            scale = hatPose.scale * 0.8; // MindAR-like scaling for large hats
+            yOffset = dynamicYOffset * 1.2; // Slightly more offset for large hats
+            scale = hatPose.scale * 0.8;
             break;
           case 'small_hat':
-            yOffset = -0.2;
-            scale = hatPose.scale * 0.02; // Very small scale like MindAR hat2
+            yOffset = dynamicYOffset * 0.8; // Less offset for small hats
+            scale = hatPose.scale * 0.02;
             break;
           default:
-            yOffset = -0.2; // Lifted higher - better positioning above head
-            scale = hatPose.scale * 0.5; // Slightly smaller for better fit
+            yOffset = dynamicYOffset; // Use calculated dynamic offset
+            scale = hatPose.scale * 0.5;
         }
         // Reduced logging - only log occasionally for debugging
         if (Math.random() < 0.1) { // Log ~10% of the time
-          console.log(`🎩 GLB Hat (${modelType}) - Scale: ${scale}, Position: (${x.toFixed(2)}, ${(y + yOffset).toFixed(2)}, ${z.toFixed(2)})`);
+          console.log(`🎩 GLB Hat (${modelType}) - Scale: ${scale}, DynamicOffset: ${yOffset.toFixed(3)}, Position: (${x.toFixed(2)}, ${(y + yOffset).toFixed(2)}, ${z.toFixed(2)})`);
         }
       } else {
-        // Fallback procedural geometry
-        yOffset = -0.3; // Lifted higher for fallback too
-        scale = hatPose.scale * 0.25; // Slightly smaller for better proportions
+        // Fallback procedural geometry - also use dynamic positioning
+        yOffset = dynamicYOffset * 0.9; // Slightly less offset for fallback
+        scale = hatPose.scale * 0.25;
         if (Math.random() < 0.1) { // Log ~10% of the time
-          console.log(`📦 Fallback Hat - Scale: ${scale}, Position: (${x.toFixed(2)}, ${(y + yOffset).toFixed(2)}, ${z.toFixed(2)})`);
+          console.log(`📦 Fallback Hat - Scale: ${scale}, DynamicOffset: ${yOffset.toFixed(3)}, Position: (${x.toFixed(2)}, ${(y + yOffset).toFixed(2)}, ${z.toFixed(2)})`);
         }
       }
       
