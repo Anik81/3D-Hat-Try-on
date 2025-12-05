@@ -1,0 +1,49 @@
+{
+  "name": "virtual-hat-tryon-frontend",
+  "version": "1.0.0",
+  "description": "Next.js frontend for Virtual Hat Try-On AR application - Minimal Hybrid System",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@react-three/drei": "^9.88.0",
+    "@react-three/fiber": "^8.15.0",
+    "next": "^14.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "three": "^0.160.0"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.1",
+    "eslint": "^8.0.0",
+    "eslint-config-next": "^14.0.0"
+  },
+  "keywords": [
+    "nextjs",
+    "augmented-reality",
+    "face-detection",
+    "three.js",
+    "webcam",
+    "hat-tryon",
+    "minimal-design",
+    "glb-model",
+    "mediapipe"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "architecture": {
+    "frontend": "Next.js 14 + React Three Fiber",
+    "backend": "FastAPI + WebSocket + MediaPipe",
+    "components": [
+      "HatTryOn.jsx (orchestrator)",
+      "WebcamCapture.jsx (video feed)",
+      "HatScene.jsx (Three.js scene)"
+    ],
+    "data-flow": "Binary JPEG frames → Python backend → JSON hat transforms"
+  }
+}
